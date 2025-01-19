@@ -1,19 +1,19 @@
 /*
- 
- Copyright © 1998 - 2020  Claris International Inc.
+
+ Copyright © 1998 - 2024 Claris International Inc.
  All rights reserved.
- 
+
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
  to enable licensees of Claris FileMaker Pro to compile plug-ins for use with Claris products.
  Redistribution and use in source and binary forms, without modification, are permitted provided
  that the following conditions are met:
- 
+
  * Redistributions of source code must retain the above copyright notice, this list of
  conditions and the following disclaimer.
- 
+
  * The name Claris International Inc. may not be used to endorse or promote products derived
  from this software without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY CLARIS INTERNATIONAL INC. ''AS IS'' AND ANY
  EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -24,7 +24,7 @@
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
+
  */
 
 #ifndef _h_DBCalcEngine_
@@ -32,7 +32,7 @@
 
 #include "FMWrapper/FMXClient.h"
 
-extern "C++" 
+extern "C++"
 {
 	namespace fmx
 	{
@@ -84,28 +84,12 @@ extern "C++"
 
 		// Calculation and script step function definition
 		FMX_PROCPTR( errcode, ExtPluginType ) ( short functionId, const ExprEnv& env, const DataVect& parms, Data& result );
-		
+
 		class ExprEnv
 		{
 		public:
 			enum
 			{
-				// DEPRECATED in FileMaker Pro 12. The server database process no longer loads plug-ins. Stored calculations
-				// containing plug-in functions will not evaluate the same way they do on a client with the plug-in if a
-				// schema change forces the server to recalculate the stored calculation's value.
-				kMayEvaluateOnServer    = 0x00000001,
-
-				// DEPRECATED in FileMaker Pro 16. All the following flags will be ignored for the commented purpose in version
-				// 16 and later. Note the change of kDisplayInAllDialogs further below.
-				kDisplayCalcFields      = 0x00000100,   // Calculated fields
-				kDisplayAutoEnter       = 0x00000200,   // Auto enter calculation
-				kDisplayValidation      = 0x00000400,   // Validation by calculation
-				kDisplayCustomFunctions = 0x00000800,   // Custom function definition
-				kDisplayPrivileges      = 0x00001000,   // Row level access calculations
-				kDisplayInFuture1       = 0x00002000,   // As yet undefined calculation dialog
-				kDisplayInFuture2       = 0x00004000,   // As yet undefined calculation dialog
-				kDisplayGeneric         = 0x00008000,   // Dialog used by scripting and replace
-
 				// Changed in FileMaker Pro 16v2. If any of these bits are set, the function will be displayed in any picking
 				// UI control. Future functions should use this constant if they want to be displayed. The function can always
 				// be typed in manually.
@@ -257,11 +241,33 @@ extern "C++"
 				kGet_OpenDataFileInfo   = 1123,
 				kGet_AccountType        = 1124,
 				kGet_PageCount          = 1125,
-
+				kGet_SystemLocaleElements = 1126,
+				kGet_FileLocaleElements = 1127,
+				kGet_InstalledFMPluginsAsJSON = 1128,
+				
+				// New to FileMaker Pro 19.4.1
+				kGet_SessionIdentifier  = 1129,
+				
+				// New to FileMaker Pro 19.5.1 internal use, new to 20.1.1 Release
+				kGet_CacheFileName      = 1130,
+				kGet_CacheFilePath      = 1131,
+				
 				// New to FileMaker Pro 19 (API VERSION 62) and later. For new EvaluateConvert... entry points
 				kConvert_PosixPath		= 1,
 				kConvert_WinPath		= 2,
-				kConvert_URLPath		= 3
+				kConvert_URLPath		= 3,
+				
+				// New to FileMaker Pro 19.6
+				kGet_TransactionState	= 1132,
+				kGet_CurrentTimeUTCMicroseconds = 1133,
+				kGet_LastErrorLocation 	= 1134,
+				
+				// New to FileMaker Pro 21.0
+				kGet_LLMLastStepTokensUsed = 1135,
+				
+				// New to FileMaker Pro 21.1
+				kGet_RevertTransactionOnErrorState = 1136,
+				kGet_SystemStorageAvailable = 1137,
 			};
 
 			inline errcode Evaluate ( const Text &expression, Data &result ) const;
@@ -354,54 +360,26 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED DataVectAutoPtr : public std::auto_ptr<DataVect>
-		{
-			typedef DataVectAutoPtr     UpCaster;
-		public:
-			inline DataVectAutoPtr ();
-		};
-
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED RowVectAutoPtr : public std::auto_ptr<RowVect>
-		{
-			typedef RowVectAutoPtr      UpCaster;
-		public:
-			inline RowVectAutoPtr ();
-		};
-
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED ExprEnvAutoPtr : public std::auto_ptr<ExprEnv>
-		{
-			typedef ExprEnvAutoPtr      UpCaster;
-		public:
-			inline ExprEnvAutoPtr ();
-		};
-#endif
-		
-#if FMX_USE_UNIQUE_PTR
 		class DataVectUniquePtr : public std::unique_ptr<DataVect>
 		{
 			typedef DataVectUniquePtr     UpCaster;
 		public:
 			inline DataVectUniquePtr ();
 		};
-		
+
 		class RowVectUniquePtr : public std::unique_ptr<RowVect>
 		{
 			typedef RowVectUniquePtr      UpCaster;
 		public:
 			inline RowVectUniquePtr ();
 		};
-		
+
 		class ExprEnvUniquePtr : public std::unique_ptr<ExprEnv>
 		{
 			typedef ExprEnvUniquePtr      UpCaster;
 		public:
 			inline ExprEnvUniquePtr ();
 		};
-#endif
 	}
 }
 
@@ -437,9 +415,6 @@ extern "C"
 	fmx::errcode FMX_API FM_ExprEnv_EvaluateGetFunction ( const void *_self, short functionValue, fmx::Data &result, fmx::_fmxcpt &_x ) throw ();
 	fmx::errcode FMX_API FM_ExprEnv_EvaluateConvertToFileMakerPath ( const void *_self, const fmx::Text &inPath, fmx::int32 inFormat, fmx::Text &outFMPath, fmx::_fmxcpt &_x ) throw ();
 	fmx::errcode FMX_API FM_ExprEnv_EvaluateConvertFromFileMakerPath ( const void *_self, const fmx::Text &inFMPath, fmx::int32 inFormat, fmx::Text &outPath, fmx::_fmxcpt &_x ) throw ();
-#if FMX_OBSOLETE_API
-	DEPRECATED fmx::errcode FMX_API FM_ExprEnv_ExecuteSQL ( const void *_self, const fmx::Text &expression, fmx::Data &result, fmx::uint16 colSep, fmx::uint16 rowSep, fmx::_fmxcpt &_x ) throw ();
-#endif  
 	fmx::errcode FMX_API FM_ExprEnv_ExecuteFileSQL ( const void *_self, const fmx::Text &expression, const fmx::Text &filename, const fmx::DataVect &parameters, fmx::RowVect& result, fmx::_fmxcpt &_x ) throw ();
 	fmx::errcode FMX_API FM_ExprEnv_ExecuteFileSQLTextResult ( const void *_self, const fmx::Text &expression, const fmx::Text &filename, const fmx::DataVect &parameters, fmx::Data &result, fmx::uint16 colSep, fmx::uint16 rowSep, fmx::_fmxcpt &_x ) throw ();
 	fmx::errcode FMX_API FM_ExprEnv_RegisterExternalFunction ( const fmx::QuadChar &pluginId, short functionId, const fmx::Text &functionName, const fmx::Text &functionPrototype, short minArgs, short maxArgs, fmx::uint32 compatibleOnFlags, fmx::ExtPluginType funcPtr, fmx::_fmxcpt &_x ) throw ();
@@ -553,23 +528,12 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline DataVectAutoPtr::DataVectAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_DataVect_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-#endif
-		
-#if FMX_USE_UNIQUE_PTR
 		inline DataVectUniquePtr::DataVectUniquePtr ()
 		{
 			_fmxcpt _x;
 			reset ( FM_DataVect_Constructor1 ( _x ) );
 			_x.Check ();
 		}
-#endif
 
 		inline uint32 RowVect::Size () const
 		{
@@ -599,23 +563,12 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline RowVectAutoPtr::RowVectAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_RowVect_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline RowVectUniquePtr::RowVectUniquePtr ()
 		{
 			_fmxcpt _x;
 			reset ( FM_RowVect_Constructor1 ( _x ) );
 			_x.Check ();
 		}
-#endif
 
 		inline errcode ExprEnv::Evaluate ( const Text &expression, Data &result ) const
 		{
@@ -715,23 +668,12 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline ExprEnvAutoPtr::ExprEnvAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_ExprEnv_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-#endif
-		
-#if FMX_USE_UNIQUE_PTR
 		inline ExprEnvUniquePtr::ExprEnvUniquePtr ()
 		{
 			_fmxcpt _x;
 			reset ( FM_ExprEnv_Constructor1 ( _x ) );
 			_x.Check ();
 		}
-#endif
 
 	}
 }

@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2021  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -84,19 +84,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED FixPtAutoPtr : public std::auto_ptr<FixPt>
-		{
-			typedef FixPtAutoPtr    UpCaster;
-		public:
-			inline FixPtAutoPtr ( fmx::int32 val = 0, int precision = FixPt::kDefltFixedPrecision );
-			inline FixPtAutoPtr ( fmx::int32 val, const FixPt &precisionExample );
-
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class FixPtUniquePtr : public std::unique_ptr<FixPt>
 		{
 			typedef FixPtUniquePtr    UpCaster;
@@ -105,7 +92,6 @@ extern "C++"
 			inline FixPtUniquePtr ( fmx::int32 val, const FixPt &precisionExample );
 
 		};
-#endif
 	}
 }
 
@@ -318,22 +304,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline FixPtAutoPtr::FixPtAutoPtr ( fmx::int32 val, int precision )
-		{
-			_fmxcpt _x;
-			reset ( FM_FixPt_Constructor1 ( val, precision, _x ) );
-			_x.Check ();
-		}
-		inline FixPtAutoPtr::FixPtAutoPtr ( fmx::int32 val, const FixPt &precisionExample )
-		{
-			_fmxcpt _x;
-			reset ( FM_FixPt_Constructor2 ( val, precisionExample, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline FixPtUniquePtr::FixPtUniquePtr ( fmx::int32 val, int precision )
 		{
 			_fmxcpt _x;
@@ -346,7 +316,6 @@ extern "C++"
 			reset ( FM_FixPt_Constructor2 ( val, precisionExample, _x ) );
 			_x.Check ();
 		}
-#endif
 
 	}
 }

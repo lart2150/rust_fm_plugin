@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2021  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -80,19 +80,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED DateTimeAutoPtr : public std::auto_ptr<DateTime>
-		{
-			typedef DateTimeAutoPtr     UpCaster;
-		public:
-			inline DateTimeAutoPtr ();
-			inline DateTimeAutoPtr ( const unichar16* dateString, uint32 dateLength, const Locale& intl );
-			inline DateTimeAutoPtr ( const Text &dateText, const Locale &intl );
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class DateTimeUniquePtr : public std::unique_ptr<DateTime>
 		{
 			typedef DateTimeUniquePtr     UpCaster;
@@ -101,7 +88,6 @@ extern "C++"
 			inline DateTimeUniquePtr ( const unichar16* dateString, uint32 dateLength, const Locale& intl );
 			inline DateTimeUniquePtr ( const Text &dateText, const Locale &intl );
 		};
-#endif
 	}
 }
 
@@ -336,28 +322,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline DateTimeAutoPtr::DateTimeAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_DateTime_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-		inline DateTimeAutoPtr::DateTimeAutoPtr ( const unichar16* dateString, uint32 dateLength, const Locale& intl )
-		{
-			_fmxcpt _x;
-			reset ( FM_DateTime_Constructor2 ( dateString, dateLength, intl, _x ) );
-			_x.Check ();
-		}
-		inline DateTimeAutoPtr::DateTimeAutoPtr ( const Text &dateText, const Locale &intl )
-		{
-			_fmxcpt _x;
-			reset ( FM_DateTime_Constructor3 ( dateText, intl, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline DateTimeUniquePtr::DateTimeUniquePtr ()
 		{
 			_fmxcpt _x;
@@ -376,7 +340,6 @@ extern "C++"
 			reset ( FM_DateTime_Constructor3 ( dateText, intl, _x ) );
 			_x.Check ();
 		}
-#endif
 
 	}
 }

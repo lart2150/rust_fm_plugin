@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2021  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -130,29 +130,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED BinaryDataAutoPtr : public std::auto_ptr<BinaryData>
-		{
-			typedef BinaryDataAutoPtr   UpCaster;
-		public:
-			inline BinaryDataAutoPtr ();
-			inline BinaryDataAutoPtr ( const BinaryData &sourceData );
-
-			// New to FileMaker Pro 13 (API VERSION 54) and later
-			// This method sets the FNAM, SIZE, main stream, and all other information streams
-			// for the given data. The extension of the file name passed in is used to determine
-			// the type of data passed in the buffer. This routine does not read data from the
-			// disk itself. Please use this to do "Insert from..." type operations.
-			inline BinaryDataAutoPtr ( const Text &name, uint32 amount, void *buffer );
-
-			// New to FileMaker Pro 14 (API VERSION 55) and later
-			// Same as the above constructor except use AddAppend/AddFinish for the data
-			inline BinaryDataAutoPtr ( const Text &name, uint32* context );
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class BinaryDataUniquePtr : public std::unique_ptr<BinaryData>
 		{
 			typedef BinaryDataUniquePtr   UpCaster;
@@ -163,7 +140,6 @@ extern "C++"
 			inline BinaryDataUniquePtr ( const Text &name, uint32 amount, void *buffer );
 			inline BinaryDataUniquePtr ( const Text &name, uint32* context );
 		};
-#endif
 	}
 }
 
@@ -293,34 +269,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline BinaryDataAutoPtr::BinaryDataAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_BinaryData_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-		inline BinaryDataAutoPtr::BinaryDataAutoPtr ( const BinaryData &sourceData )
-		{
-			_fmxcpt _x;
-			reset ( FM_BinaryData_Constructor2 ( sourceData, _x ) );
-			_x.Check ();
-		}
-		inline BinaryDataAutoPtr::BinaryDataAutoPtr ( const Text &name, uint32 amount, void *buffer )
-		{
-			_fmxcpt _x;
-			reset ( FM_BinaryData_Constructor3 ( name, amount, buffer, _x ) );
-			_x.Check ();
-		}
-		inline BinaryDataAutoPtr::BinaryDataAutoPtr ( const Text &name, fmx::uint32* context )
-		{
-			_fmxcpt _x;
-			reset ( FM_BinaryData_Constructor4 ( name, context, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline BinaryDataUniquePtr::BinaryDataUniquePtr ()
 		{
 			_fmxcpt _x;
@@ -345,7 +293,6 @@ extern "C++"
 			reset ( FM_BinaryData_Constructor4 ( name, context, _x ) );
 			_x.Check ();
 		}
-#endif
 
 		inline errcode BinaryData::GetFNAMData ( Text &filepathlist ) const
 		{

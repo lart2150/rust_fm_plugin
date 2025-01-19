@@ -48,33 +48,12 @@ extern "C" {
         _x: *mut fmx__fmxcpt,
     ) -> FMError;
 
-    #[deprecated]
-    #[allow(dead_code)]
-    fn FM_Data_GetFontID(
-        _self: *const fmx_Data,
-        fontDisplayName: *const fmx_Text,
-        fontScript: fmx_fontscript,
-        env: *const fmx_ExprEnv,
-        _x: *mut fmx__fmxcpt,
-    ) -> fmx_fontid;
-
     fn FM_Data_GetPostscriptFontID(
         _self: *const fmx_Data,
         fontPostscriptName: *const fmx_Text,
         env: *const fmx_ExprEnv,
         _x: *mut fmx__fmxcpt,
     ) -> fmx_fontid;
-
-    #[deprecated]
-    #[allow(dead_code)]
-    fn FM_Data_GetFontInfo(
-        _self: *const fmx_Data,
-        font: fmx_fontid,
-        fontDisplayName: *mut fmx_Text,
-        fontScript: *mut fmx_fontscript,
-        env: *const fmx_ExprEnv,
-        _x: *mut fmx__fmxcpt,
-    ) -> bool;
 
     fn FM_Data_GetPostscriptFontInfo(
         _self: *const fmx_Data,

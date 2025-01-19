@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2021  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -155,18 +155,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED TextAutoPtr : public std::auto_ptr<Text>
-		{
-			typedef TextAutoPtr     UpCaster;
-		public:
-			inline TextAutoPtr ();
-
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class TextUniquePtr : public std::unique_ptr<Text>
 		{
 			typedef TextUniquePtr     UpCaster;
@@ -174,7 +162,6 @@ extern "C++"
 			inline TextUniquePtr ();
 
 		};
-#endif
 	}
 }
 
@@ -428,23 +415,12 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline TextAutoPtr::TextAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_Text_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline TextUniquePtr::TextUniquePtr ()
 		{
 			_fmxcpt _x;
 			reset ( FM_Text_Constructor1 ( _x ) );
 			_x.Check ();
 		}
-#endif
 
 	}
 }

@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2020  Claris International Inc.
+ Copyright © 1998 - 2024 Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -36,7 +36,7 @@
 
 // Platform specific macros
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && (defined (__cplusplus) && __cplusplus >= 201103L)
 
 	#define FMX_PACK                    __attribute__ ((packed))
 	#define FMX_PACK_ON
@@ -50,21 +50,7 @@
 		#define DEPRECATED              __attribute__((deprecated))
 	#endif
 
-	#if defined (_LIBCPP_STD_VER) && _LIBCPP_STD_VER > 14
-		#define FMX_USE_AUTO_PTR    0
-	#else
-		#define FMX_USE_AUTO_PTR    1
-	#endif
-
-	#if defined(_UNIQUE_PTR_H) || defined(_LIBCPP_VERSION)
-		#define FMX_USE_UNIQUE_PTR      1
-	#endif
-
-	#if defined(_LP64)
-		#define FMX_64BIT_PLUGIN_API    1
-	#endif
-
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && _MSC_VER >= 1800
 
 	#define FMX_PACK
 	#define FMX_PACK_ON                 pack (push, 1)
@@ -78,30 +64,10 @@
 		#define DEPRECATED              __declspec(deprecated)
 	#endif
 
-	#if defined(_MSVC_LANG) && _MSVC_LANG <= 201402
-		#define FMX_USE_AUTO_PTR    1
-	#endif
-
-	#if _MSC_VER >= 1800
-		#define FMX_USE_UNIQUE_PTR      1
-	#endif
-
-	#if defined(_M_X64)
-		#define FMX_64BIT_PLUGIN_API    1
-	#endif
-
 #else
 
-	#error "Unsupported compiler"
+	#error "Unsupported compiler version"
 
-#endif
-
-// Original memorary manager callbacks and External() call exists only on Mac and Win 32 bit targets
-
-#if defined(FMX_64BIT_PLUGIN_API) || defined(__linux__) || TARGET_OS_IPHONE
-	#define FMX_OBSOLETE_API    0
-#else
-	#define FMX_OBSOLETE_API    1
 #endif
 
 // Forward definitions
@@ -123,40 +89,16 @@ extern "C++"
 	#if defined( _MSC_VER )
 		typedef __int64             int64;
 		typedef unsigned __int64    uint64;
-
-		#if defined( _M_X64)
 		typedef uint64              ptrtype;
-		#else
-		typedef uint32              ptrtype;
-		#endif
 		typedef int16               unusedid;
 	#else
-		#if defined( _LP64 )
 		typedef long                int64;
 		typedef unsigned long       uint64;
 		typedef uint64              ptrtype;
 		typedef int32               unusedid;
-		#else
-		typedef long long           int64;
-		typedef unsigned long long  uint64;
-		typedef uint32              ptrtype;
-		typedef int16               unusedid;
-		#endif
 	#endif
 		typedef short               errcode;
 		typedef unsigned short      unichar16;
-
-		typedef DEPRECATED unichar16 unichar; // DEPRECATED in version 15. unichar conflicts often with Cocoa's definition of it
-
-#if FMX_OBSOLETE_API
-
-		// DEPRECATED in version 15. These are provided for backwards compatibility. Newly developed plugins(both 32-bit and 64-bit)
-		// should be specific about the sizes of integers and not rely on ambiguous "long" data types.
-		typedef DEPRECATED fmx::uint32     ulong;
-		typedef DEPRECATED fmx::uint16     ushort;
-		typedef DEPRECATED fmx::int64      longlong;
-
-#endif // FMX_OBSOLETE_API
 
 	}
 }
@@ -175,46 +117,6 @@ extern "C"
 	typedef fmx::ptrtype    FMX_PtrType;
 	typedef char            FMX_Char;
 	typedef char            FMX_Boolean;
-
-#if FMX_OBSOLETE_API
-
-// DEPRECATED in version 15. Old style definitions; never were supported in 64-bit plugins;
-
-// These are provided for backwards compatibility. Newly developed plugins(both 32-bit and 64-bit) should be specific about the sizes of
-// integers and not rely on ambiguous "long" data types.
-typedef DEPRECATED FMX_UInt32      FMX_ULong;
-typedef DEPRECATED FMX_UInt16      FMX_UShort;
-typedef DEPRECATED FMX_Int32       FMX_Long;
-typedef DEPRECATED FMX_Int16       FMX_Short;
-typedef DEPRECATED FMX_Char*       FMX_Ptr;
-typedef DEPRECATED FMX_Char**      FMX_Hdl;
-
-// Memory accessors for old style plug-ins
-// New style plugins should not use these.  When creating new objects (BinaryData, Text, etc), use the autoptr classes provided in the SDK.
-
-FMX_PROCPTR(char**,     FMX_NewHandleCall)(FMX_Int32 size);
-FMX_PROCPTR(void,       FMX_SetHandleSizeCall)(char** h, FMX_Int32 size);
-FMX_PROCPTR(FMX_Int32,  FMX_GetHandleSizeCall)(char** h);
-FMX_PROCPTR(void,       FMX_DisposeHandleCall)(char** h);
-FMX_PROCPTR(void,       FMX_MoveHHiCall)(char** h);
-FMX_PROCPTR(void,       FMX_LockHandleCall)(char** h);
-FMX_PROCPTR(void,       FMX_UnlockHandleCall)(char** h);
-FMX_PROCPTR(char*,      FMX_NewPointerCall)(FMX_Int32 size);
-FMX_PROCPTR(void,       FMX_DisposePointerCall)(char* p);
-FMX_PROCPTR(FMX_Int16,  FMX_MemoryErrorCall)(void);
-
-#define FMX_NewHandle(size)         (gFMX_ExternCallPtr->cNewHandle)(size)
-#define FMX_SetHandleSize(h, size)  (gFMX_ExternCallPtr->cSetHandleSize)(h, size)
-#define FMX_GetHandleSize(h)        (gFMX_ExternCallPtr->cGetHandleSize)(h)
-#define FMX_DisposeHandle(h)        (gFMX_ExternCallPtr->cDisposeHandle)(h)
-#define FMX_MoveHHi(h)              (gFMX_ExternCallPtr->cMoveHHi)(h)
-#define FMX_LockHandle(h)           (gFMX_ExternCallPtr->cLockHandle)(h)
-#define FMX_UnlockHandle(h)         (gFMX_ExternCallPtr->cUnlockHandle)(h)
-#define FMX_NewPointer(size)        (gFMX_ExternCallPtr->cNewPointer)(size)
-#define FMX_DisposePointer(p)       (gFMX_ExternCallPtr->cDisposePointer)(p)
-#define FMX_MemoryError()           (gFMX_ExternCallPtr->cMemoryError)()
-
-#endif // FMX_OBSOLETE_API
 
 // New public callbacks
 
@@ -254,7 +156,18 @@ enum
 	k170ExtnVersion     = 59,
 	k180ExtnVersion     = 60,
 	k190ExtnVersion     = 62,
-	kCurrentExtnVersion = 62,
+	k191ExtnVersion     = 63,
+	k192ExtnVersion     = 64,
+	k193ExtnVersion     = 65,
+	k194ExtnVersion     = 66,
+	k195ExtnVersion     = 67,
+	k196ExtnVersion     = 68,
+    k201ExtnVersion     = 71,
+	k202ExtnVersion     = 72,
+	k203ExtnVersion     = 73,
+	k210ExtnVersion     = 74,
+	k211ExtnVersion     = 75,
+	kCurrentExtnVersion = 75,
 	kMinExtnVersion     = 4,
 	kMaxExtnVersion     = 255
 };
@@ -264,16 +177,17 @@ enum
 {
 	kFMXT_Init              = 0,        // Enabled by kFMXT_OptionsStr character 8
 	kFMXT_Idle              = 1,        // Enabled by kFMXT_OptionsStr character 9
-#if FMX_OBSOLETE_API
-	kFMXT_External          = 3,        // DEPRECATED External function callback
-#endif
+	// kFMXT_External       = 3,        // DEPRECATED External function callback
 	kFMXT_Shutdown          = 4,        // Enabled by kFMXT_OptionsStr character 8
 	kFMXT_DoAppPreferences  = 5,        // Enabled by kFMXT_OptionsStr character 6
 	kFMXT_GetString         = 7,        // REQUIRED to be handled
 
 	// New to FileMaker Pro 15 (API VERSION 56) and later
 	kFMXT_SessionShutdown   = 8,        // Enabled by kFMXT_OptionsStr character 10
-	kFMXT_FileShutdown      = 9         // Enabled by kFMXT_OptionsStr character 10
+	kFMXT_FileShutdown      = 9,        // Enabled by kFMXT_OptionsStr character 10
+
+	// New to FileMaker Pro 21.1 (API VERSION 75) and later
+	kFMXT_SchemaChange      = 10        // Enabled by kFMXT_OptionsStr character 10
 };
 
 typedef FMX_UChar   FMX_Strings;        // Different strings that may be asked for by kFMXT_GetString
@@ -300,15 +214,16 @@ enum
 typedef FMX_UChar   FMX_Application;
 enum
 {
-	kFMXT_Developer         = 0,        // FileMaker Pro Advanced
+	kFMXT_Developer         = 0,        // FileMaker Pro Advanced (no longer shipping)
 	kFMXT_Pro               = 1,        // FileMaker Pro
-	kFMXT_Runtime           = 2,        // FileMaker Runtime
+	kFMXT_Runtime           = 2,        // FileMaker Runtime (no longer shipping)
 	kFMXT_Server            = 3,        // This process no longer loads plug-ins
 	kFMXT_Web               = 4,        // Web Publishing process
 	kFMXT_Mobile            = 5,        // This iOS process is not allowed to load plug-ins
 	kFMXT_XDBC              = 6,        // This process does not currently load plug-ins
 	kFMXT_SASE              = 7,        // Server scripting process
-	kFMXT_IWP               = 8         // This process no longer exists
+	kFMXT_IWP               = 8,        // This process no longer exists
+	kFMXT_FMDAPI            = 9         // FileMaker Data API process
 };
 
 struct              FMX_ExternCallStruct;
@@ -323,9 +238,9 @@ struct FMX_ExternCallStruct
 		FMX_Int16               extnVersion;                    // Version of this structure, set to the value of kCurrentExtnVersion
 		fmx::unusedid           unusedID;                       // Always -1 as of FileMaker Pro version 19 (API VERSION 61)
 		FMX_ExternCallProc      entryPoint;                     // The pointer the plug-ins entry point, FMExternCallProc
-		FMX_Boolean             cfmCalls;                       // Always false (i.e. 0)
+		FMX_Boolean             unusedFlag;                     // Always false (i.e. 0)
 		FMX_ExternCallSwitch    whichCall;                      // Which call FileMaker is making into the plug-in (i.e. kFMXT_Init and others)
-		FMX_Boolean             unsafeCalls;                    // True if unsafe for non-memory calls
+		FMX_Boolean             unsafeCalls;                    // True if not on the main thread
 
 	// Parameters for the calls; any parameter not used by a call is set to zero.
 		FMX_UChar               parm1;
@@ -336,15 +251,15 @@ struct FMX_ExternCallStruct
 	//  Msg =                   Parm1                       Parm2                           Parm3
 	//  kFMXT_Init              FMX_Application value       App vers unicode c str*         [unused]
 	//  kFMXT_Idle              FMX_IdleLevel value         Session ID                      [unused]
-	//  kFMXT_External          [unused]                    Funct str index                 Parameter text**
 	//  kFMXT_Shutdown          [unused]                    [unused]                        [unused]
 	//  kFMXT_DoAppPreferences  [unused]                    [unused]                        [unused]
 	//  kFMXT_GetString         FMX_Strings value           Windows lang ID                 Maximum size of string to return
 	//  kFMXT_SessionShutdown   [unused]                    Session ID                      [unused]
 	//  kFMXT_FileShutdown      [unused]                    Session ID                      File ID
+	//  kFMXT_SchemaChange      [unused]                    char* to utf8 JSON text**       Length of utf8 JSON text
 	//
 	//(* same as GetAppVersion, e.g. "Pro 13.0v2" )
-	//(** Parameter from calculation as text, in kEncoding_ASCII_Mac or kEncoding_ShiftJIS_Mac; Result passed back to FileMaker must match encoding.)
+	//(** This message only sent to plug-ins loaded in the server side scripting process)
 
 	// Passed in every call
 		FMX_PtrType             instanceID;                     // ID of the plug-in
@@ -356,20 +271,6 @@ struct FMX_ExternCallStruct
 
 	// Unused
 		FMX_PtrType             unused;
-
-#if FMX_OBSOLETE_API
-	// DEPRECATED in version 15. Call backs for old plug-ins
-		DEPRECATED FMX_NewHandleCall       cNewHandle;
-		DEPRECATED FMX_SetHandleSizeCall   cSetHandleSize;
-		DEPRECATED FMX_GetHandleSizeCall   cGetHandleSize;
-		DEPRECATED FMX_DisposeHandleCall   cDisposeHandle;
-		DEPRECATED FMX_MoveHHiCall         cMoveHHi;
-		DEPRECATED FMX_LockHandleCall      cLockHandle;
-		DEPRECATED FMX_UnlockHandleCall    cUnlockHandle;
-		DEPRECATED FMX_NewPointerCall      cNewPointer;
-		DEPRECATED FMX_DisposePointerCall  cDisposePointer;
-		DEPRECATED FMX_MemoryErrorCall     cMemoryError;
-#endif
 
 	// New public callbacks
 		FMX_StartScriptCall     cStartScript;

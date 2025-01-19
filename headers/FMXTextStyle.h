@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2024  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -46,28 +46,6 @@ extern "C++"
 			typedef unsigned short FontSize;
 			typedef unsigned char ColorChannel;
 			typedef unsigned short ColorChannel16;
-
-			// DEPRECATED in FileMaker Pro 14. Fonts no longer belong to "scripts"
-			typedef unsigned short FontScript;
-			enum
-			{
-				kRoman                  = 0,
-				kGreek                  = 1,
-				kCyrillic               = 2,
-				kCentralEurope          = 3,
-				kShiftJIS               = 4,
-				kTraditionalChinese     = 5,
-				kSimplifiedChinese      = 6,
-				kOEM                    = 7,
-				kSymbol                 = 8,
-				kNative                 = 9,
-				kOther                  = 10,
-				kKorean                 = 11,
-				kDingbats               = 12,
-				kTurkish                = 13,
-
-				kInvalidFont            = 0xFFFF
-			};
 
 			class Color
 			{
@@ -171,33 +149,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED ColorAutoPtr : public std::auto_ptr<CharacterStyle::Color>
-		{
-			typedef ColorAutoPtr    UpCaster;
-		public:
-			inline ColorAutoPtr ();
-			inline ColorAutoPtr ( CharacterStyle::ColorChannel red, CharacterStyle::ColorChannel green, CharacterStyle::ColorChannel blue,
-											CharacterStyle::ColorChannel alpha = CharacterStyle::Color::kColorChannel_ON );
-			inline ColorAutoPtr ( const CharacterStyle::Color &mask );
-
-		};
-
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED CharacterStyleAutoPtr : public std::auto_ptr<CharacterStyle>
-		{
-			typedef CharacterStyleAutoPtr   UpCaster;
-		public:
-			inline CharacterStyleAutoPtr ();
-			inline CharacterStyleAutoPtr ( CharacterStyle::FontID font, CharacterStyle::Face face, CharacterStyle::FontSize size,
-											const CharacterStyle::Color &color = CharacterStyle::Color::Black() );
-			inline CharacterStyleAutoPtr ( const CharacterStyle &style );
-
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class ColorUniquePtr : public std::unique_ptr<CharacterStyle::Color>
 		{
 			typedef ColorUniquePtr    UpCaster;
@@ -219,7 +170,6 @@ extern "C++"
 			inline CharacterStyleUniquePtr ( const CharacterStyle &style );
 
 		};
-#endif
 	}
 }
 
@@ -408,28 +358,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline ColorAutoPtr::ColorAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_Color_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-		inline ColorAutoPtr::ColorAutoPtr ( CharacterStyle::ColorChannel red, CharacterStyle::ColorChannel green, CharacterStyle::ColorChannel blue, CharacterStyle::ColorChannel alpha )
-		{
-			_fmxcpt _x;
-			reset ( FM_Color_Constructor2 ( red, green, blue, alpha, _x ) );
-			_x.Check ();
-		}
-		inline ColorAutoPtr::ColorAutoPtr ( const CharacterStyle::Color &color )
-		{
-			_fmxcpt _x;
-			reset ( FM_Color_Constructor3 ( color, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline ColorUniquePtr::ColorUniquePtr ()
 		{
 			_fmxcpt _x;
@@ -448,7 +376,6 @@ extern "C++"
 			reset ( FM_Color_Constructor3 ( color, _x ) );
 			_x.Check ();
 		}
-#endif
 
 		inline void CharacterStyle::EnableFont ()
 		{
@@ -645,28 +572,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline CharacterStyleAutoPtr::CharacterStyleAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_CharacterStyle_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-		inline CharacterStyleAutoPtr::CharacterStyleAutoPtr ( CharacterStyle::FontID font, CharacterStyle::Face face, CharacterStyle::FontSize size, const CharacterStyle::Color &color )
-		{
-			_fmxcpt _x;
-			reset ( FM_CharacterStyle_Constructor2 ( font, face, size, color, _x ) );
-			_x.Check ();
-		}
-		inline CharacterStyleAutoPtr::CharacterStyleAutoPtr ( const CharacterStyle &style )
-		{
-			_fmxcpt _x;
-			reset ( FM_CharacterStyle_Constructor3 ( style, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline CharacterStyleUniquePtr::CharacterStyleUniquePtr ()
 		{
 			_fmxcpt _x;
@@ -685,7 +590,6 @@ extern "C++"
 			reset ( FM_CharacterStyle_Constructor3 ( style, _x ) );
 			_x.Check ();
 		}
-#endif
 	}
 }
 

@@ -1,6 +1,6 @@
 /*
 
- Copyright © 1998 - 2019  Claris International Inc.
+ Copyright © 1998 - 2021  Claris International Inc.
  All rights reserved.
 
  Claris International Inc. grants you a non-exclusive limited license to use this file solely
@@ -83,6 +83,9 @@ extern "C++"
 				kType_DAN               = 19,   // Danish
 				kType_NLD               = 20,   // Dutch
 				kType_ENG               = 21,   // English
+#ifdef XUNIX
+				kType_ENG_INTL          = 77,   // English Intl
+#endif
 				kType_FIN               = 22,   // Finnish
 				kType_FIN_fmi           = 23,   // Finnish (FileMaker custom)
 				kType_FRA               = 24,   // French
@@ -159,30 +162,6 @@ extern "C++"
 
 		};
 
-#if FMX_USE_AUTO_PTR
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED QuadCharAutoPtr : public std::auto_ptr<QuadChar>
-		{
-						typedef QuadCharAutoPtr UpCaster;
-		public:
-			inline QuadCharAutoPtr ();
-			inline QuadCharAutoPtr ( char c0, char c1, char c2, char c3 );
-			inline QuadCharAutoPtr ( const QuadChar &value );
-
-		};
-
-		// DEPRECATED in FileMaker Pro 15. C++11 deprecated std::auto_ptr and replaced with std::unique_ptr.
-		class DEPRECATED LocaleAutoPtr : public std::auto_ptr<Locale>
-		{
-						typedef LocaleAutoPtr   UpCaster;
-		public:
-			inline LocaleAutoPtr ( Locale::Type inputType = Locale::kType_System );
-			inline LocaleAutoPtr ( const Locale &copyConstruct );
-
-		};
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		class QuadCharUniquePtr : public std::unique_ptr<QuadChar>
 		{
 			typedef QuadCharUniquePtr UpCaster;
@@ -201,7 +180,6 @@ extern "C++"
 			inline LocaleUniquePtr ( const Locale &copyConstruct );
 
 		};
-#endif
 	}
 }
 
@@ -320,28 +298,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline QuadCharAutoPtr::QuadCharAutoPtr ()
-		{
-			_fmxcpt _x;
-			reset ( FM_QuadChar_Constructor1 ( _x ) );
-			_x.Check ();
-		}
-		inline QuadCharAutoPtr::QuadCharAutoPtr ( char c0, char c1, char c2, char c3 )
-		{
-			_fmxcpt _x;
-			reset ( FM_QuadChar_Constructor2 ( c0, c1, c2, c3, _x ) );
-			_x.Check ();
-		}
-		inline QuadCharAutoPtr::QuadCharAutoPtr ( const QuadChar &value )
-		{
-			_fmxcpt _x;
-			reset ( FM_QuadChar_Constructor3 ( value, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline QuadCharUniquePtr::QuadCharUniquePtr ()
 		{
 			_fmxcpt _x;
@@ -360,7 +316,6 @@ extern "C++"
 			reset ( FM_QuadChar_Constructor3 ( value, _x ) );
 			_x.Check ();
 		}
-#endif
 		inline Locale &Locale::operator = ( const Locale &rhs )
 		{
 			_fmxcpt _x;
@@ -375,22 +330,6 @@ extern "C++"
 			_x.Check ();
 		}
 
-#if FMX_USE_AUTO_PTR
-		inline LocaleAutoPtr::LocaleAutoPtr ( Locale::Type inputType )
-		{
-			_fmxcpt _x;
-			reset ( FM_Locale_Constructor1 ( inputType, _x ) );
-			_x.Check ();
-		}
-		inline LocaleAutoPtr::LocaleAutoPtr ( const Locale &copyConstruct )
-		{
-			_fmxcpt _x;
-			reset ( FM_Locale_Constructor2 ( copyConstruct, _x ) );
-			_x.Check ();
-		}
-#endif
-
-#if FMX_USE_UNIQUE_PTR
 		inline LocaleUniquePtr::LocaleUniquePtr ( Locale::Type inputType )
 		{
 			_fmxcpt _x;
@@ -403,7 +342,6 @@ extern "C++"
 			reset ( FM_Locale_Constructor2 ( copyConstruct, _x ) );
 			_x.Check ();
 		}
-#endif
 	}
 }
 

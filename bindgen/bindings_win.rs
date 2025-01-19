@@ -11381,44 +11381,6 @@ fn bindgen_test_layout_fmx_Locale() {
 }
 #[repr(C)]
 #[derive(Debug)]
-pub struct fmx_QuadCharAutoPtr {
-    pub _base: std_auto_ptr<fmx_QuadChar>,
-}
-pub type fmx_QuadCharAutoPtr_UpCaster = fmx_QuadCharAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_QuadCharAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_QuadCharAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_QuadCharAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_QuadCharAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_QuadCharAutoPtr))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_LocaleAutoPtr {
-    pub _base: std_auto_ptr<fmx_Locale>,
-}
-pub type fmx_LocaleAutoPtr_UpCaster = fmx_LocaleAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_LocaleAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_LocaleAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_LocaleAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_LocaleAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_LocaleAutoPtr))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
 pub struct fmx_QuadCharUniquePtr {
     pub _base: std_unique_ptr,
 }
@@ -11471,25 +11433,6 @@ fn bindgen_test_layout_fmx_BinaryData() {
         ::std::mem::align_of::<fmx_BinaryData>(),
         1usize,
         concat!("Alignment of ", stringify!(fmx_BinaryData))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_BinaryDataAutoPtr {
-    pub _base: std_auto_ptr<fmx_BinaryData>,
-}
-pub type fmx_BinaryDataAutoPtr_UpCaster = fmx_BinaryDataAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_BinaryDataAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_BinaryDataAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_BinaryDataAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_BinaryDataAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_BinaryDataAutoPtr))
     );
 }
 #[repr(C)]
@@ -11560,15 +11503,8 @@ pub type fmx_ExtPluginType = ::std::option::Option<
 pub struct fmx_ExprEnv {
     pub _address: u8,
 }
-pub const fmx_ExprEnv_kMayEvaluateOnServer: fmx_ExprEnv__bindgen_ty_1 = 1;
-pub const fmx_ExprEnv_kDisplayCalcFields: fmx_ExprEnv__bindgen_ty_1 = 256;
-pub const fmx_ExprEnv_kDisplayAutoEnter: fmx_ExprEnv__bindgen_ty_1 = 512;
-pub const fmx_ExprEnv_kDisplayValidation: fmx_ExprEnv__bindgen_ty_1 = 1024;
-pub const fmx_ExprEnv_kDisplayCustomFunctions: fmx_ExprEnv__bindgen_ty_1 = 2048;
-pub const fmx_ExprEnv_kDisplayPrivileges: fmx_ExprEnv__bindgen_ty_1 = 4096;
-pub const fmx_ExprEnv_kDisplayInFuture1: fmx_ExprEnv__bindgen_ty_1 = 8192;
-pub const fmx_ExprEnv_kDisplayInFuture2: fmx_ExprEnv__bindgen_ty_1 = 16384;
-pub const fmx_ExprEnv_kDisplayGeneric: fmx_ExprEnv__bindgen_ty_1 = 32768;
+
+
 pub const fmx_ExprEnv_kDisplayInAllDialogs: fmx_ExprEnv__bindgen_ty_1 = 65280;
 pub const fmx_ExprEnv_kMacCompatible: fmx_ExprEnv__bindgen_ty_1 = 2;
 pub const fmx_ExprEnv_kWinCompatible: fmx_ExprEnv__bindgen_ty_1 = 4;
@@ -11709,6 +11645,25 @@ pub const fmx_ExprEnv_kGet_UUIDNumber: fmx_ExprEnv__bindgen_ty_1 = 1122;
 pub const fmx_ExprEnv_kGet_OpenDataFileInfo: fmx_ExprEnv__bindgen_ty_1 = 1123;
 pub const fmx_ExprEnv_kGet_AccountType: fmx_ExprEnv__bindgen_ty_1 = 1124;
 pub const fmx_ExprEnv_kGet_PageCount: fmx_ExprEnv__bindgen_ty_1 = 1125;
+
+pub const fmx_ExprEnv_kGet_SystemLocaleElements: fmx_ExprEnv__bindgen_ty_1 = 1126;
+pub const fmx_ExprEnv_kGet_FileLocaleElements: fmx_ExprEnv__bindgen_ty_1 = 1127;
+pub const fmx_ExprEnv_kGet_InstalledFMPluginsAsJSON: fmx_ExprEnv__bindgen_ty_1 = 1128;
+// New to FileMaker Pro 19.4.1
+pub const fmx_ExprEnv_kGet_kGet_SessionIdentifier: fmx_ExprEnv__bindgen_ty_1 = 1129;
+// New to FileMaker Pro 19.5.1 internal use, new to 20.1.1 Release
+pub const fmx_ExprEnv_kGet_CacheFileName: fmx_ExprEnv__bindgen_ty_1 = 1130;
+pub const fmx_ExprEnv_kGet_CacheFilePath: fmx_ExprEnv__bindgen_ty_1 = 1131;
+// New to FileMaker Pro 19.6
+pub const fmx_ExprEnv_kGet_TransactionState: fmx_ExprEnv__bindgen_ty_1 = 1132;
+pub const fmx_ExprEnv_kGet_CurrentTimeUTCMicroseconds: fmx_ExprEnv__bindgen_ty_1 = 1133;
+pub const fmx_ExprEnv_kGet_LastErrorLocation: fmx_ExprEnv__bindgen_ty_1 = 1134;
+// New to FileMaker Pro 21.0
+pub const fmx_ExprEnv_kGet_LLMLastStepTokensUsed: fmx_ExprEnv__bindgen_ty_1 = 1135;
+// New to FileMaker Pro 21.1
+pub const fmx_ExprEnv_kGet_RevertTransactionOnErrorState: fmx_ExprEnv__bindgen_ty_1 = 1136;
+pub const fmx_ExprEnv_kGet_SystemStorageAvailable: fmx_ExprEnv__bindgen_ty_1 = 1137;
+
 pub const fmx_ExprEnv_kConvert_PosixPath: fmx_ExprEnv__bindgen_ty_1 = 1;
 pub const fmx_ExprEnv_kConvert_WinPath: fmx_ExprEnv__bindgen_ty_1 = 2;
 pub const fmx_ExprEnv_kConvert_URLPath: fmx_ExprEnv__bindgen_ty_1 = 3;
@@ -11724,63 +11679,6 @@ fn bindgen_test_layout_fmx_ExprEnv() {
         ::std::mem::align_of::<fmx_ExprEnv>(),
         1usize,
         concat!("Alignment of ", stringify!(fmx_ExprEnv))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_DataVectAutoPtr {
-    pub _base: std_auto_ptr<fmx_DataVect>,
-}
-pub type fmx_DataVectAutoPtr_UpCaster = fmx_DataVectAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_DataVectAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_DataVectAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_DataVectAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_DataVectAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_DataVectAutoPtr))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_RowVectAutoPtr {
-    pub _base: std_auto_ptr<fmx_RowVect>,
-}
-pub type fmx_RowVectAutoPtr_UpCaster = fmx_RowVectAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_RowVectAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_RowVectAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_RowVectAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_RowVectAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_RowVectAutoPtr))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_ExprEnvAutoPtr {
-    pub _base: std_auto_ptr<fmx_ExprEnv>,
-}
-pub type fmx_ExprEnvAutoPtr_UpCaster = fmx_ExprEnvAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_ExprEnvAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_ExprEnvAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_ExprEnvAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_ExprEnvAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_ExprEnvAutoPtr))
     );
 }
 #[repr(C)]
@@ -12025,25 +11923,6 @@ fn bindgen_test_layout_fmx_Data() {
 }
 #[repr(C)]
 #[derive(Debug)]
-pub struct fmx_DataAutoPtr {
-    pub _base: std_auto_ptr<fmx_Data>,
-}
-pub type fmx_DataAutoPtr_UpCaster = fmx_DataAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_DataAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_DataAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_DataAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_DataAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_DataAutoPtr))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
 pub struct fmx_DataUniquePtr {
     pub _base: std_unique_ptr,
 }
@@ -12077,25 +11956,6 @@ fn bindgen_test_layout_fmx_DateTime() {
         ::std::mem::align_of::<fmx_DateTime>(),
         1usize,
         concat!("Alignment of ", stringify!(fmx_DateTime))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_DateTimeAutoPtr {
-    pub _base: std_auto_ptr<fmx_DateTime>,
-}
-pub type fmx_DateTimeAutoPtr_UpCaster = fmx_DateTimeAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_DateTimeAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_DateTimeAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_DateTimeAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_DateTimeAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_DateTimeAutoPtr))
     );
 }
 #[repr(C)]
@@ -12135,25 +11995,6 @@ fn bindgen_test_layout_fmx_FixPt() {
         ::std::mem::align_of::<fmx_FixPt>(),
         1usize,
         concat!("Alignment of ", stringify!(fmx_FixPt))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_FixPtAutoPtr {
-    pub _base: std_auto_ptr<fmx_FixPt>,
-}
-pub type fmx_FixPtAutoPtr_UpCaster = fmx_FixPtAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_FixPtAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_FixPtAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_FixPtAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_FixPtAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_FixPtAutoPtr))
     );
 }
 #[repr(C)]
@@ -12232,25 +12073,6 @@ fn bindgen_test_layout_fmx_Text() {
         ::std::mem::align_of::<fmx_Text>(),
         1usize,
         concat!("Alignment of ", stringify!(fmx_Text))
-    );
-}
-#[repr(C)]
-#[derive(Debug)]
-pub struct fmx_TextAutoPtr {
-    pub _base: std_auto_ptr<fmx_Text>,
-}
-pub type fmx_TextAutoPtr_UpCaster = fmx_TextAutoPtr;
-#[test]
-fn bindgen_test_layout_fmx_TextAutoPtr() {
-    assert_eq!(
-        ::std::mem::size_of::<fmx_TextAutoPtr>(),
-        8usize,
-        concat!("Size of: ", stringify!(fmx_TextAutoPtr))
-    );
-    assert_eq!(
-        ::std::mem::align_of::<fmx_TextAutoPtr>(),
-        8usize,
-        concat!("Alignment of ", stringify!(fmx_TextAutoPtr))
     );
 }
 #[repr(C)]
@@ -13360,31 +13182,12 @@ extern "C" {
     pub fn FM_Data_Delete(_self: *mut ::std::os::raw::c_void, _x: *mut fmx__fmxcpt);
 }
 extern "C" {
-    pub fn FM_Data_GetFontID(
-        _self: *const ::std::os::raw::c_void,
-        fontDisplayName: *const fmx_Text,
-        fontScript: fmx_CharacterStyle_FontScript,
-        env: *const fmx_ExprEnv,
-        _x: *mut fmx__fmxcpt,
-    ) -> fmx_CharacterStyle_FontID;
-}
-extern "C" {
     pub fn FM_Data_GetPostscriptFontID(
         _self: *const ::std::os::raw::c_void,
         fontPostscriptName: *const fmx_Text,
         env: *const fmx_ExprEnv,
         _x: *mut fmx__fmxcpt,
     ) -> fmx_CharacterStyle_FontID;
-}
-extern "C" {
-    pub fn FM_Data_GetFontInfo(
-        _self: *const ::std::os::raw::c_void,
-        font: fmx_CharacterStyle_FontID,
-        fontDisplayName: *mut fmx_Text,
-        fontScript: *mut fmx_CharacterStyle_FontScript,
-        env: *const fmx_ExprEnv,
-        _x: *mut fmx__fmxcpt,
-    ) -> bool;
 }
 extern "C" {
     pub fn FM_Data_GetPostscriptFontInfo(
